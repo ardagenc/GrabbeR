@@ -5,17 +5,17 @@ using UnityEngine;
 public class CameraController : MonoBehaviour
 {
     [SerializeField] private Transform crane;
-    [SerializeField] private Camera camera;
+    [SerializeField] private Camera cam;
 
     // Start is called before the first frame update
     void Start()
     {
-        camera = Camera.main;
+        cam = Camera.main;
     }
 
     // Update is called once per frame
     void Update()
     {
-        camera.transform.LookAt(crane);
+        cam.transform.LookAt(crane);
     }
 }
