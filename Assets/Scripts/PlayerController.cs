@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
+using DG.Tweening;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -14,12 +15,16 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Transform controllerStick;
     [SerializeField] private float rotationClampValue;
+
+    [SerializeField] private Transform[] grabber;
+    private bool isOpen = true;
     
     void Update()
     {
         HandleAxis();
         GrabberMovement();
         UpdateControllerStickRotation();
+        HandleGrabber();
     }
 
     private void HandleAxis()
@@ -54,6 +59,39 @@ public class PlayerController : MonoBehaviour
         float locationX = crane.position.x - craneMovement * speed * Time.deltaTime;
 
         crane.position = new Vector3(locationX, crane.position.y, crane.position.z);
+    }
+
+    private void ClampAxisRotation(ref float axis, float clampValue)
+    {
+        if(axis < clampValue || axis > 360 - clampValue)
+        {
+            return;
+        }
+        else if(axis > clampValue && axis < 180)
+        {
+            axis = clampValue;
+        }
+        else if(axis < 360 - clampValue && axis > 180)
+        {
+            axis = 360 - clampValue;
+        }
+    }
+
+    private void UpdateControllerStickRotation()
+    {
+        controllerStick.Rotate(verticalAxis, 0f, -horizontalAxis);
+
+        Vector3 eulerAngles = controllerStick.eulerAngles;
+
+        ClampAxisRotation(ref eulerAngles.z, rotationClampValue);
+        ClampAxisRotation(ref eulerAngles.x, rotationClampValue);
+
+        controllerStick.eulerAngles = eulerAngles;
+
+        if(!Input.GetMouseButton(0))
+        {
+            controllerStick.rotation = Quaternion.Lerp(controllerStick.rotation, Camera.main.transform.rotation, 0.1f);
+        }
     }
 
     /*
@@ -99,38 +137,32 @@ public class PlayerController : MonoBehaviour
         }
     }
     */
-    
-    private void ClampAxisRotation(ref float axis, float clampValue)
+
+    private void HandleGrabber()
     {
-        if(axis < clampValue || axis > 360 - clampValue)
+        if(Input.GetKeyDown(KeyCode.A))
         {
-            return;
+            if (isOpen)
+            {
+                for (int i = 0; i < grabber.Length; i++)
+                {
+                    grabber[i].DOLocalRotate(new Vector3(-50f, grabber[i].eulerAngles.y, grabber[i].eulerAngles.z), 1f);
+                }
+
+                isOpen = false;
+            }
+            else
+            {
+                for (int i = 0; i < grabber.Length; i++)
+                {
+                    grabber[i].DOLocalRotate(new Vector3(0f, grabber[i].eulerAngles.y, grabber[i].eulerAngles.z), 1f);
+                }
+
+                isOpen = true;
+            }
+
         }
-        else if(axis > clampValue && axis < 180)
-        {
-            axis = clampValue;
-        }
-        else if(axis < 360 - clampValue && axis > 180)
-        {
-            axis = 360 - clampValue;
-        }
-    }
-
-    private void UpdateControllerStickRotation()
-    {
-        controllerStick.Rotate(verticalAxis, 0f, -horizontalAxis);
-
-        Vector3 eulerAngles = controllerStick.eulerAngles;
-
-        ClampAxisRotation(ref eulerAngles.z, rotationClampValue);
-        ClampAxisRotation(ref eulerAngles.x, rotationClampValue);
-
-        controllerStick.eulerAngles = eulerAngles;
-
-        if(!Input.GetMouseButton(0))
-        {
-            controllerStick.rotation = Quaternion.Lerp(controllerStick.rotation, Camera.main.transform.rotation, 0.1f);
-        }
+            
     }
 
 }
