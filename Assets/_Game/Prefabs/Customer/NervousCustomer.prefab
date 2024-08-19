@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3401925523863054612}
   - component: {fileID: 8258640018158818098}
   - component: {fileID: 4435713253328037535}
+  - component: {fileID: -7796570075047684135}
   m_Layer: 0
   m_Name: NervousCustomer
   m_TagString: Untagged
@@ -106,6 +107,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &-7796570075047684135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3709136640106800936}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72464c43e7e8e254e8a5b498122aa28e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4628617563723369232
 GameObject:
   m_ObjectHideFlags: 0

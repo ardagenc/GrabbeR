@@ -289,6 +289,7 @@ GameObject:
   m_Component:
   - component: {fileID: 222708025}
   - component: {fileID: 222708026}
+  - component: {fileID: 222708028}
   - component: {fileID: 222708027}
   m_Layer: 0
   m_Name: CustomerSpawnManager
@@ -326,6 +327,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _spawnInterval: 5
   _maxCustomers: 10
+  customerTypes:
+  - {fileID: 11400000, guid: ba3b2a72e8d03554ea93cbaa2302ded3, type: 2}
+  - {fileID: 11400000, guid: 69db670af3d77904fb9cb51ec5e6839a, type: 2}
+  - {fileID: 11400000, guid: 8216d693b74552445b51a45b59e7c96b, type: 2}
 --- !u!114 &222708027
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -335,7 +340,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 222708024}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d061b4eac1187bc4fb51b7186d5dbe3a, type: 3}
+  m_Script: {fileID: 11500000, guid: a7e482a4236424743bbc0314409a1789, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  leaveDestination1: {x: 0, y: 0, z: 0}
+  leaveDestination2: {x: 0, y: 0, z: 0}
+--- !u!114 &222708028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 222708024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1dba6cd67c4a49c4ebe80b6d54d68703, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   minX: -10
@@ -764,7 +783,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   customerSpawner: {fileID: 222708026}
-  customerDestination: {fileID: 222708027}
+  customerMoveDestination: {fileID: 222708028}
+  customerLeaveDestination: {fileID: 222708027}
 --- !u!1 &1551771045
 GameObject:
   m_ObjectHideFlags: 0

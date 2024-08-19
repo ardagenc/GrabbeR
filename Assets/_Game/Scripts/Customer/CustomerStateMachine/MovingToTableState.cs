@@ -5,7 +5,6 @@ using UnityEngine;
 public class MovingToTableState : CustomerState
 {
     private Vector3 destination;
-    private float moveSpeed = 5f;
 
     public MovingToTableState(Customer customer, CustomerSO customerData, Vector3 destination) : base(customer, customerData)
     {
@@ -14,7 +13,7 @@ public class MovingToTableState : CustomerState
 
     public override void EnterState()
     {
-        throw new System.NotImplementedException();
+        Debug.Log($"{customerData.customerID} start to moving!");
     }
 
     public override void ExitState()

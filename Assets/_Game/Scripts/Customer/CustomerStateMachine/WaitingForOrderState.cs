@@ -7,7 +7,7 @@ public class WaitingForOrderState : CustomerState
     private float waitTime;
     public WaitingForOrderState(Customer customer, CustomerSO customerData) : base(customer, customerData)
     {
-        this.waitTime = customerData.customerWaitTime;
+        this.waitTime = customerData.customerWaitTimeOnOrdering;
     }
 
     public override void EnterState()

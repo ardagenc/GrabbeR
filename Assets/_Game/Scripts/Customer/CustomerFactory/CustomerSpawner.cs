@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static CustomerObjectPool;
 
 public class CustomerSpawner : MonoBehaviour
 {
@@ -9,18 +10,21 @@ public class CustomerSpawner : MonoBehaviour
 
     private int _currentCustomerCount = 0;
 
-    private ICustomerDestination _customerDestination;
+    [SerializeField] private CustomerSO[] customerTypes;
+    private ICustomerDestination moveDestination;
+    private ICustomerDestination leaveDestination;
 
-    public void Initialize(ICustomerDestination customerDestination)
+    public void Initialize(ICustomerDestination moveDes, ICustomerDestination leaveDes)
     {
-        _customerDestination = customerDestination;
+        this.moveDestination = moveDes;
+        this.leaveDestination = leaveDes;
     }
 
     void Start()
     {
-        if (_customerDestination == null)
+        if (moveDestination == null || leaveDestination == null)
         {
-            Debug.LogError("CustomerDestination is not set!");
+            Debug.LogError("MoveDestination or LeaveDestination is not set!");
             return;
         }
 
@@ -35,10 +39,9 @@ public class CustomerSpawner : MonoBehaviour
 
             CustomerObjectPool.CustomerType customerType = DetermineCustomerType();
 
-            Vector3 destination = _customerDestination.DetermineDestination();
+            CustomerSO customerData = customerTypes[Random.Range(0, customerTypes.Length)];
 
-            //Customer newCustomer = CustomerFactory.CreateCustomer(customerType, destination);
-
+            Customer newCustomer = CustomerFactory.CreateCustomer(customerType, customerData, moveDestination, leaveDestination);
             _currentCustomerCount++;
         }
     }

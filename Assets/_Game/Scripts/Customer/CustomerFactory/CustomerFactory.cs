@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class CustomerFactory
 {
-    public static Customer CreateCustomer(CustomerObjectPool.CustomerType customerType, CustomerSO customerData, ICustomerDestination moveDestination, ICustomerDestination leaveDestination)
+    public static Customer CreateCustomer(CustomerObjectPool.CustomerType customerType, CustomerSO customerData, ICustomerDestination moveDest, ICustomerDestination leaveDest)
     {
         GameObject customerObj = CustomerObjectPool.Instance.GetPooledCustomer(customerType);
         Customer customer = customerObj.GetComponent<Customer>();
 
-        customer.Initialize(customerData, moveDestination, leaveDestination);
+        customer.Initialize(customerData, moveDest, leaveDest);
 
-        Vector3 destination = moveDestination.DetermineDestination();
+        Vector3 destination = moveDest.DetermineDestination();
         customer.SetState(new MovingToTableState(customer, customerData, destination));
 
         return customer;

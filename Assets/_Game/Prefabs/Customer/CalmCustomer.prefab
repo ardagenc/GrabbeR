@@ -117,6 +117,7 @@ GameObject:
   - component: {fileID: 7202002851668543440}
   - component: {fileID: 3287496655750075474}
   - component: {fileID: 2953104797561780386}
+  - component: {fileID: 7531503227567997249}
   m_Layer: 0
   m_Name: CalmCustomer
   m_TagString: Untagged
@@ -211,3 +212,15 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7531503227567997249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6993608603722091820}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72464c43e7e8e254e8a5b498122aa28e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
