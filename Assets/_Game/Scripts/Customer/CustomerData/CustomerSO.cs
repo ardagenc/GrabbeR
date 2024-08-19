@@ -6,6 +6,8 @@ using UnityEngine;
 public class CustomerSO : ScriptableObject
 {
     public string customerID;
+    public GameObject customerPrefab;
     public float customerWaitTimeOnOrdering;
     public float customerMovementSpeed;
+    public int customerPoolCount;
 }

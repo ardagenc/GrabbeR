@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class CustomerFactory
 {
-    public static Customer CreateCustomer(CustomerObjectPool.CustomerType customerType, CustomerSO customerData, ICustomerDestination moveDest, ICustomerDestination leaveDest)
+    public static Customer CreateCustomer(CustomerSO customerData, ICustomerDestination moveDest, ICustomerDestination leaveDest)
     {
-        GameObject customerObj = CustomerObjectPool.Instance.GetPooledCustomer(customerType);
+        GameObject customerObj = CustomerObjectPool.Instance.GetPooledCustomer(customerData);
         Customer customer = customerObj.GetComponent<Customer>();
 
         customer.Initialize(customerData, moveDest, leaveDest);

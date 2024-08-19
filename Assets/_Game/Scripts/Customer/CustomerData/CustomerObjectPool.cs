@@ -6,7 +6,9 @@ public class CustomerObjectPool : MonoBehaviour
 {
     public static CustomerObjectPool Instance { get; private set; }
 
-    [SerializeField] private CustomerPool[] _pools = null;
+    [SerializeField] private CustomerSO[] customerTypes = null;
+
+    private Dictionary<CustomerSO, Queue<GameObject>> pools = new Dictionary<CustomerSO, Queue<GameObject>>();
 
     private void Awake()
     {
@@ -18,55 +20,36 @@ public class CustomerObjectPool : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
         InitializePools();
     }
 
     private void InitializePools()
     {
-        for (int j = 0; j < _pools.Length; j++)
+        foreach (var customerType in customerTypes)
         {
-            _pools[j].pooledCustomers = new Queue<GameObject>();
-
-            for (int i = 0; i < _pools[j].pooledCustomerCount; i++)
+            Queue<GameObject> queue = new Queue<GameObject>();
+            for (int i = 0; i < customerType.customerPoolCount; i++)
             {
-                GameObject obj = Instantiate(_pools[j].customerPrefab);
+                GameObject obj = Instantiate(customerType.customerPrefab);
                 obj.SetActive(false);
-
-                _pools[j].pooledCustomers.Enqueue(obj);
+                queue.Enqueue(obj);
             }
+            pools[customerType] = queue;
         }
     }
 
-    public GameObject GetPooledCustomer(CustomerType customerType)
+    public GameObject GetPooledCustomer(CustomerSO customerType)
     {
-        int customerTypeIndex = (int)customerType;
-
-        if (customerTypeIndex >= _pools.Length)
+        if (!pools.ContainsKey(customerType))
         {
+            Debug.LogError($"No pool found for customer type: {customerType.customerID}");
             return null;
         }
 
-        GameObject obj = _pools[customerTypeIndex].pooledCustomers.Dequeue();
+        var pool = pools[customerType];
+        GameObject obj = pool.Dequeue();
         obj.SetActive(true);
-
-        _pools[customerTypeIndex].pooledCustomers.Enqueue(obj);
-
+        pool.Enqueue(obj);
         return obj;
-    }
-
-    [System.Serializable]
-    public struct CustomerPool
-    {
-        public Queue<GameObject> pooledCustomers;
-        public GameObject customerPrefab;
-        public int pooledCustomerCount;
-    }
-
-    public enum CustomerType
-    {
-        RegularCustomer,
-        NervousCustomer,
-        CalmCustomer
     }
 }

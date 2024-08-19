@@ -16,6 +16,14 @@ public class Customer : MonoBehaviour
         LeaveDestination = leaveDestination;
     }
 
+    public void ResetCustomer()
+    {
+        currentState = null;
+        customerData = null;
+        MoveDestination = null;
+        LeaveDestination = null;
+    }
+
     public void SetState(CustomerState newState)
     {
         currentState?.ExitState();
