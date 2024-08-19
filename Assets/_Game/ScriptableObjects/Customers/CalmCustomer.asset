@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: CalmCustomer
   m_EditorClassIdentifier: 
   customerID: CalmCustomer
+  customerPrefab: {fileID: 6993608603722091820, guid: 63ade09443886694e9dbfe19498f233f, type: 3}
   customerWaitTimeOnOrdering: 6.5
   customerMovementSpeed: 2
+  customerPoolCount: 10

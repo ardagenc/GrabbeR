@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: NervousCustomer
   m_EditorClassIdentifier: 
   customerID: NervousCustomer
+  customerPrefab: {fileID: 3709136640106800936, guid: 85b4cc74c616c1a499f515d58c7cea8e, type: 3}
   customerWaitTimeOnOrdering: 3.5
   customerMovementSpeed: 4
+  customerPoolCount: 10
