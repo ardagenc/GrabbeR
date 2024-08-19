@@ -38,7 +38,7 @@ public class CustomerObjectPool : MonoBehaviour
         }
     }
 
-    public GameObject GetPooledBullet(CustomerType customerType)
+    public GameObject GetPooledCustomer(CustomerType customerType)
     {
         int customerTypeIndex = (int)customerType;
 
@@ -65,7 +65,8 @@ public class CustomerObjectPool : MonoBehaviour
 
     public enum CustomerType
     {
-        StandartBullet,
-        AOEBullet,
+        RegularCustomer,
+        NervousCustomer,
+        CalmCustomer
     }
 }
