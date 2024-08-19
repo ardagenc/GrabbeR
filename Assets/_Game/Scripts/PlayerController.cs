@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Transform[] grabber;
     private bool isOpen = true;
+
+    [SerializeField] private HingeJoint hinge;
     
     void Update()
     {
@@ -43,51 +45,61 @@ public class PlayerController : MonoBehaviour
 
     private void GrabberMovement()
     {
+        float xAxis = controllerStick.localEulerAngles.x;
         float zAxis = controllerStick.eulerAngles.z;
-        float craneMovement;
+        float craneMovementX;
+        float craneMovementY;
 
-        if(zAxis < 180)
+        craneMovementX = ClampGrabberMovement(zAxis, rotationClampValue);
+        craneMovementY = ClampGrabberMovement(xAxis, rotationClampValue);
+
+        float locationX = crane.position.x - craneMovementX * speed * Time.deltaTime;
+        float locationY = hinge.anchor.y - craneMovementY * Time.deltaTime;
+
+        crane.position = new Vector3(locationX, crane.position.y, crane.position.z);
+        hinge.anchor = new Vector3(0f, locationY, 0f);
+    }
+
+    private float ClampGrabberMovement(float axis, float clampValue)
+    {
+        if(axis < 180)
         {
-            craneMovement = zAxis / rotationClampValue ;   
+            return  axis / clampValue ;   
         }
         else
         {
-            craneMovement = (zAxis - 360) / rotationClampValue;
+            return (axis - 360) / clampValue;
         }
-
-
-        float locationX = crane.position.x - craneMovement * speed * Time.deltaTime;
-
-        crane.position = new Vector3(locationX, crane.position.y, crane.position.z);
     }
 
-    private void ClampAxisRotation(ref float axis, float clampValue)
+    private void ClampAxisRotation(ref float axis, float clampValue, float cameraOffset)
     {
-        if(axis < clampValue || axis > 360 - clampValue)
-        {
-            return;
-        }
-        else if(axis > clampValue && axis < 180)
-        {
-            axis = clampValue;
-        }
-        else if(axis < 360 - clampValue && axis > 180)
-        {
-            axis = 360 - clampValue;
-        }
+    if(axis < clampValue + cameraOffset || axis > 360 - clampValue + cameraOffset)
+    {
+        return;
+    }
+    else if(axis > clampValue + cameraOffset && axis < 180 + cameraOffset)
+    {
+        axis = clampValue + cameraOffset;
+    }
+    else if(axis < 360 - clampValue + cameraOffset && axis > 180 + cameraOffset)
+    {
+        axis = 360 - clampValue + cameraOffset;
+    }
     }
 
     private void UpdateControllerStickRotation()
     {
-        controllerStick.Rotate(verticalAxis, 0f, -horizontalAxis);
+        controllerStick.Rotate(verticalAxis * speed, 0f, -horizontalAxis * speed, Space.Self);
 
         Vector3 eulerAngles = controllerStick.eulerAngles;
+        eulerAngles.y = Camera.main.transform.rotation.eulerAngles.y;
 
-        ClampAxisRotation(ref eulerAngles.z, rotationClampValue);
-        ClampAxisRotation(ref eulerAngles.x, rotationClampValue);
+        ClampAxisRotation(ref eulerAngles.z, rotationClampValue, Camera.main.transform.eulerAngles.z);
+        ClampAxisRotation(ref eulerAngles.x, rotationClampValue, Camera.main.transform.eulerAngles.x);
 
         controllerStick.eulerAngles = eulerAngles;
-
+            
         if(!Input.GetMouseButton(0))
         {
             controllerStick.rotation = Quaternion.Lerp(controllerStick.rotation, Camera.main.transform.rotation, 0.1f);
