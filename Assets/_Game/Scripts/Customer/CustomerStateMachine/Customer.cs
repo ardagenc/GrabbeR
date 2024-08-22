@@ -6,22 +6,14 @@ public class Customer : MonoBehaviour
 {
     private CustomerState currentState;
     private CustomerSO customerData;
-    public ICustomerDestination MoveDestination { get; private set; }
-    public ICustomerDestination LeaveDestination { get; private set; }
+    public ICustomerPositionPoints MoveDestination { get; private set; }
+    public ICustomerPositionPoints LeaveDestination { get; private set; }
 
-    public void Initialize(CustomerSO data, ICustomerDestination moveDestination, ICustomerDestination leaveDestination)
+    public void Initialize(CustomerSO data, ICustomerPositionPoints moveDestination, ICustomerPositionPoints leaveDestination)
     {
         customerData = data;
         MoveDestination = moveDestination;
         LeaveDestination = leaveDestination;
-    }
-
-    public void ResetCustomer()
-    {
-        currentState = null;
-        customerData = null;
-        MoveDestination = null;
-        LeaveDestination = null;
     }
 
     public void SetState(CustomerState newState)

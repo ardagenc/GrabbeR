@@ -1,16 +1,21 @@
 using UnityEngine;
 
-public class CustomerMoveDestination : MonoBehaviour, ICustomerDestination
+public class CustomerMoveDestination : MonoBehaviour, ICustomerPositionPoints
 {
-    [SerializeField] private float minX = -10f;
-    [SerializeField] private float maxX = 10f;
-    [SerializeField] private float minZ = -10f;
-    [SerializeField] private float maxZ = 10f;
+    [SerializeField] private Vector3 moveDestination1;
+    [SerializeField] private Vector3 moveDestination2;
 
-    public Vector3 DetermineDestination()
+    public Vector3 DetermineDestinationPoint()
     {
-        float x = Random.Range(minX, maxX);
-        float z = Random.Range(minZ, maxZ);
-        return new Vector3(x, 0f, z);
+        int randomIndex = Random.Range(0, 2);
+
+        if (randomIndex == 0)
+        {
+            return moveDestination1;
+        }
+        else
+        {
+            return moveDestination2;
+        }
     }
 }

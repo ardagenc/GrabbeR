@@ -10,10 +10,10 @@ public class CustomerSpawner : MonoBehaviour
 
     [SerializeField] private CustomerSO[] customerTypes;
 
-    private ICustomerDestination moveDestination;
-    private ICustomerDestination leaveDestination;
+    private ICustomerPositionPoints moveDestination;
+    private ICustomerPositionPoints leaveDestination;
 
-    public void Initialize(ICustomerDestination moveDes, ICustomerDestination leaveDes)
+    public void Initialize(ICustomerPositionPoints moveDes, ICustomerPositionPoints leaveDes)
     {
         this.moveDestination = moveDes;
         this.leaveDestination = leaveDes;
@@ -34,8 +34,11 @@ public class CustomerSpawner : MonoBehaviour
         while (_currentCustomerCount < _maxCustomers)
         {
             yield return new WaitForSeconds(_spawnInterval);
+
             CustomerSO customerData = customerTypes[Random.Range(0, customerTypes.Length)];
+
             Customer newCustomer = CustomerFactory.CreateCustomer(customerData, moveDestination, leaveDestination);
+
             _currentCustomerCount++;
         }
     }

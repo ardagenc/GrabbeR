@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,16 +14,14 @@ public class MovingToTableState : CustomerState
 
     public override void EnterState()
     {
-        Debug.Log($"{customerData.customerID} start to moving!");
+        customer.transform.DOMove(destination, 5f);
     }
 
     public override void ExitState()
     {
-        throw new System.NotImplementedException();
     }
 
     public override void UpdateState()
     {
-        throw new System.NotImplementedException();
     }
 }
