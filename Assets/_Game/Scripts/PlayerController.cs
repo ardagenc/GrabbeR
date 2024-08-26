@@ -19,11 +19,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Transform controllerStick;
     [SerializeField] private float rotationClampValue;
 
-    [SerializeField] private Transform grabberParent;
+    [SerializeField] private Transform grabberAnchor;
     [SerializeField] private Transform[] grabber;
+    [SerializeField] private float grabberCloseAngle;
+    [SerializeField] private float grabberCloseSpeed;
     private bool isOpen = true;
 
     [SerializeField] private HingeJoint hinge;
+
+    Tween originalPos;
 
 
     public static event Action onGrab;
@@ -63,10 +67,34 @@ public class PlayerController : MonoBehaviour
         craneMovementY = ClampGrabberMovement(xAxis, rotationClampValue);
 
         float locationX = crane.position.x - craneMovementX * horizontalSpeed * Time.deltaTime;
-        float locationY = hinge.anchor.y - craneMovementY * verticalSpeed *  Time.deltaTime;
+        locationX = Mathf.Clamp(locationX, -10, 5);
 
-        crane.position = new Vector3(locationX, crane.position.y, crane.position.z);
-        hinge.anchor = new Vector3(0f, locationY, 0f);
+        //hinge anchor method
+        //float locationY = hinge.anchor.y - craneMovementY * verticalSpeed *  Time.deltaTime;
+
+        float locationY = crane.position.y + craneMovementY * verticalSpeed *  Time.deltaTime;
+        locationY = Mathf.Clamp(locationY, 10, 20);
+        crane.position = new Vector3(locationX, locationY, crane.position.z);
+        //hinge.anchor = new Vector3(0f, locationY, 0f);
+        
+        if(Input.GetMouseButtonDown(0))
+        {
+            originalPos.Kill();
+        }
+
+        if(Input.GetMouseButtonUp(0))
+        {
+            GrabberOriginalPos();
+        }
+
+    }
+
+    public void GrabberOriginalPos()
+    {
+        Debug.Log("grabber original pos");
+
+        grabberAnchor.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        originalPos = grabberAnchor.DOMove(crane.position - hinge.anchor, 3f).SetEase(Ease.OutBack);
     }
 
     private float ClampGrabberMovement(float axis, float clampValue)
@@ -111,19 +139,10 @@ public class PlayerController : MonoBehaviour
             
         if(!Input.GetMouseButton(0))
         {
-            controllerStick.rotation = Quaternion.Lerp(controllerStick.rotation, Camera.main.transform.rotation, 0.1f);
-
+            controllerStick.rotation =  Camera.main.transform.rotation;
+            //Quaternion.Lerp(controllerStick.rotation, Camera.main.transform.rotation, 0.1f);
         }
-        if(Input.GetMouseButtonUp(0))
-        {
-            GrabberOriginalPos();
-        }
-    }
 
-    public void GrabberOriginalPos()
-    {
-        grabberParent.GetComponent<Rigidbody>().velocity /= 10;
-        grabberParent.DOMove(crane.position - hinge.anchor, 1f).SetEase(Ease.OutBack);
     }
 
     private void HandleGrabber()
@@ -136,7 +155,7 @@ public class PlayerController : MonoBehaviour
             {
                 for (int i = 0; i < grabber.Length; i++)
                 {
-                    grabber[i].DOLocalRotate(new Vector3(grabber[i].eulerAngles.x, grabber[i].eulerAngles.y, 60f), 1f);
+                    grabber[i].DOLocalRotate(new Vector3(grabber[i].eulerAngles.x, grabber[i].eulerAngles.y, grabberCloseAngle), grabberCloseSpeed);
                 }
 
                 isOpen = false;
@@ -145,7 +164,7 @@ public class PlayerController : MonoBehaviour
             {
                 for (int i = 0; i < grabber.Length; i++)
                 {
-                    grabber[i].DOLocalRotate(new Vector3(grabber[i].eulerAngles.x, grabber[i].eulerAngles.y, 0f), 1f);
+                    grabber[i].DOLocalRotate(new Vector3(grabber[i].eulerAngles.x, grabber[i].eulerAngles.y, 0f), grabberCloseSpeed);
                 }
 
                 isOpen = true;

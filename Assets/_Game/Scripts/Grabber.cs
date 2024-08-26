@@ -48,15 +48,18 @@ public class Grabber : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if(other.CompareTag("Fruit"))
+        if(other.CompareTag("Fruit") && playerController.IsOpen)
         {
-            Debug.Log("Collision");
             fruits.Add(other.gameObject);
         }
     }
 
     void OnTriggerExit(Collider other)
     {
-        fruits.Remove(other.gameObject);
+        if(other.CompareTag("Fruit"))
+        {
+            fruits.Remove(other.gameObject);
+            other.transform.parent = null;
+        }
     }
 }
